@@ -18,7 +18,7 @@
     </section>
 
     <nav
-      class="bg-neutral-5 py-6 px-4 mt-auto md:col-start-2 md:col-end-4 md:row-start-6 md:row-end-7 w-full md:h-full"
+      class="mt-auto md:col-start-2 md:col-end-4 md:row-start-6 md:row-end-7 w-full md:h-full"
       aria-label="navbar"
     >
       <slot name="nav" />
