@@ -1,0 +1,1 @@
+export type NavButtonType = "confirm" | "next" | "back"

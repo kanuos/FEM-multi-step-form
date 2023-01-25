@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  export let type: "confirm" | "next" | "back";
+  import type { NavButtonType } from "../ts-support";
+  export let type: NavButtonType;
 
   const dispatch = createEventDispatcher();
 
@@ -14,7 +15,7 @@
 {#if type === "confirm"}
   <button
     on:click={handleClickBtn}
-    type="button"
+    type="submit"
     class="text-neutral-3 bg-primary-2">Confirm</button
   >
 {:else if type === "next"}
