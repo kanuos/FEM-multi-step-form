@@ -11,9 +11,10 @@
   } from "./ts-support";
   import { UserValidator } from "./helper";
   import PlanForm from "./lib/PlanForm.svelte";
+  import AddOnSelector from "./lib/AddOnSelector.svelte";
 
   // reactive state
-  $: currentStepIndex = 1;
+  $: currentStepIndex = 2;
   $: showBtns = true;
   $: formData = {
     user: {
@@ -51,31 +52,32 @@
   function handleClickBtn({ detail }) {
     const { type }: { type: NavButtonType } = detail;
 
+    // confirm button is clicked
+
     // check if type is back
     if (type === "back") {
       stepBackward();
       return;
     }
 
-    // user clicked next/confirm
-
     // First section and the user clicks the next button
-    if (currentStepIndex === 0 && type === "next") {
-      // validate personal info using the validator
-      const { error } = UserValidator.validate(formData.user);
-      if (error) {
-        const {
-          message,
-          context: { label: field },
-        } = error.details[0];
-        errors[field] = message;
+    if (type === "next") {
+      if (currentStepIndex === 0) {
+        // validate personal info using the validator
+        const { error } = UserValidator.validate(formData.user);
+        if (error) {
+          const {
+            message,
+            context: { label: field },
+          } = error.details[0];
+          errors[field] = message;
 
-        const t = setTimeout(resetErrors, 1500);
-        return () => clearTimeout(t);
+          const t = setTimeout(resetErrors, 1500);
+          return () => clearTimeout(t);
+        }
+        // valid form data hence remove all errors (if they exist)
+        resetErrors();
       }
-      // valid form data hence remove all errors (if they exist)
-      resetErrors();
-      // step forward to the next slot
       stepForward();
     }
     console.log(type, formData);
@@ -112,6 +114,11 @@
           bind:selectedPlan={formData.plan}
           bind:billingFrequency={formData.billingFrequency}
           on:toggle-frequency={toggleBillingFrequency}
+        />
+      {:else if currentStepIndex === 2}
+        <AddOnSelector
+          bind:selectedAddOns={formData.addOns}
+          bind:billingFrequency={formData.billingFrequency}
         />
       {/if}
     </div>

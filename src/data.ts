@@ -2,7 +2,7 @@ import arcade from "./assets/icon-arcade.svg";
 import advanced from "./assets/icon-advanced.svg";
 import pro from "./assets/icon-pro.svg";
 
-import type { BillingFrequencyType, PlanType } from "./ts-support"
+import type { BillingFrequencyType, IAddOnMetadata, PlanType } from "./ts-support"
 
 export const steps: string[] = [
     "your info",
@@ -69,7 +69,7 @@ export class MyPlan {
         }
     }
 
-    getBillingFactor(billFrequency: BillingFrequencyType): { factor: number, short: string } {
+    static getBillingFactor(billFrequency: BillingFrequencyType): { factor: number, short: string } {
         return billFrequency === "monthly" ? {
             factor: 1,
             short: "mo"
@@ -81,3 +81,23 @@ export class MyPlan {
 
 }
 
+export const addOnMetadata: IAddOnMetadata[] = [
+    {
+        heading: "Online service",
+        desc: 'Access to multiplayer games',
+        monthly: 1,
+        yearly: 10
+    },
+    {
+        heading: "Larger storage",
+        desc: 'Extra 1TB of cloud save',
+        monthly: 2,
+        yearly: 20
+    },
+    {
+        heading: "Customizable profile",
+        desc: 'Custom theme on your profile',
+        monthly: 2,
+        yearly: 20
+    },
+]

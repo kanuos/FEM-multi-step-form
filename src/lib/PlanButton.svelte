@@ -10,7 +10,7 @@
   // reactive data
   $: planObj = new MyPlan(plan);
   $: planData = planObj.getPlanDetail();
-  $: billSchedule = planObj.getBillingFactor(billingFrequency);
+  $: billSchedule = MyPlan.getBillingFactor(billingFrequency);
   $: isSelected = plan === selectedPlan;
 </script>
 
