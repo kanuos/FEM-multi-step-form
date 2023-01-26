@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import type { BillingFrequencyType, PlanType } from "../ts-support";
   import { MyPlan } from "../data";
   // props
@@ -38,7 +37,7 @@
       ${planData.monthly * billSchedule.factor}/{billSchedule.short}
     </span>
     {#if billingFrequency === "yearly"}
-      <small transition:fade class="text-primary-1 font-medium tracking-tight">
+      <small class="text-primary-1 font-medium tracking-tight">
         2 months free
       </small>
     {/if}

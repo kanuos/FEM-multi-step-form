@@ -12,9 +12,11 @@
   import { UserValidator } from "./helper";
   import PlanForm from "./lib/PlanForm.svelte";
   import AddOnSelector from "./lib/AddOnSelector.svelte";
+  import Checkout from "./lib/Checkout.svelte";
+  import ThankYou from "./lib/ThankYou.svelte";
 
   // reactive state
-  $: currentStepIndex = 2;
+  $: currentStepIndex = 0;
   $: showBtns = true;
   $: formData = {
     user: {
@@ -32,6 +34,9 @@
     email: "",
     phone: "",
   };
+
+  $: formSubmitted = false;
+
   // callback functions
   function stepForward() {
     currentStepIndex = Math.min(currentStepIndex + 1, steps.length - 1);
@@ -51,9 +56,6 @@
 
   function handleClickBtn({ detail }) {
     const { type }: { type: NavButtonType } = detail;
-
-    // confirm button is clicked
-
     // check if type is back
     if (type === "back") {
       stepBackward();
@@ -83,13 +85,17 @@
     console.log(type, formData);
   }
 
+  function handleSubmitForm() {
+    formSubmitted = true;
+  }
+
   function toggleBillingFrequency() {
     formData.billingFrequency =
       formData.billingFrequency === "monthly" ? "yearly" : "monthly";
   }
 </script>
 
-<form>
+<form on:submit|preventDefault={handleSubmitForm}>
   <PageLayout>
     <ul
       slot="step"
@@ -107,19 +113,30 @@
       {/each}
     </ul>
     <div slot="form">
-      {#if currentStepIndex === 0}
-        <InfoForm bind:user={formData.user} bind:errors />
-      {:else if currentStepIndex === 1}
-        <PlanForm
-          bind:selectedPlan={formData.plan}
-          bind:billingFrequency={formData.billingFrequency}
-          on:toggle-frequency={toggleBillingFrequency}
-        />
-      {:else if currentStepIndex === 2}
-        <AddOnSelector
-          bind:selectedAddOns={formData.addOns}
-          bind:billingFrequency={formData.billingFrequency}
-        />
+      {#if !formSubmitted}
+        {#if currentStepIndex === 0}
+          <InfoForm bind:user={formData.user} bind:errors />
+        {:else if currentStepIndex === 1}
+          <PlanForm
+            bind:selectedPlan={formData.plan}
+            bind:billingFrequency={formData.billingFrequency}
+            on:toggle-frequency={toggleBillingFrequency}
+          />
+        {:else if currentStepIndex === 2}
+          <AddOnSelector
+            bind:selectedAddOns={formData.addOns}
+            bind:billingFrequency={formData.billingFrequency}
+          />
+        {:else if currentStepIndex === 3}
+          <Checkout
+            bind:plan={formData.plan}
+            bind:selectedAddOns={formData.addOns}
+            bind:billingFrequency={formData.billingFrequency}
+            on:change-billing-frequency={toggleBillingFrequency}
+          />
+        {/if}
+      {:else}
+        <ThankYou />
       {/if}
     </div>
     <ul
@@ -128,14 +145,18 @@
         ? 'bg-neutral-5'
         : ''}"
     >
-      <div class="w-11/12 py-3  max-w-sm md:max-w-md mx-auto grid grid-cols-2">
-        <Navbar
-          on:handle-click={handleClickBtn}
-          maxSteps={steps.length - 1}
-          {currentStepIndex}
-          {showBtns}
-        />
-      </div>
+      {#if !formSubmitted}
+        <div
+          class="w-11/12 py-3  max-w-sm md:max-w-md mx-auto grid grid-cols-2"
+        >
+          <Navbar
+            on:handle-click={handleClickBtn}
+            maxSteps={steps.length - 1}
+            {currentStepIndex}
+            {showBtns}
+          />
+        </div>
+      {/if}
     </ul>
   </PageLayout>
 </form>

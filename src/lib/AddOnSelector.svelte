@@ -40,7 +40,9 @@
           </p>
 
           <span class="text-primary-2 text-sm font-medium">
-            +${addOn.monthly}/{MyPlan.getBillingFactor(billingFrequency).short}
+            +${billingFrequency === "monthly"
+              ? addOn.monthly
+              : addOn.yearly}/{MyPlan.getBillingFactor(billingFrequency).short}
           </span>
         </label>
       {/each}
