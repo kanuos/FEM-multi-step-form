@@ -7,7 +7,7 @@
 
 <section class="flex flex-col items-start justify-start gap-1 w-full">
   <p class="flex items-center justify-between w-full">
-    <label for={label} class="text-primary-1 font-medium capitalize text-sm">
+    <label for={label} class="text-primary-1 font-medium capitalize text-xs">
       {label}
     </label>
     <span class="text-primary-5 font-bold capitalize text-xs">

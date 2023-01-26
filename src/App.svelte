@@ -1,15 +1,19 @@
 <script lang="ts">
-  import {} from "svelte";
   import PageLayout from "./lib/PageLayout.svelte";
   import { steps } from "./data";
   import Step from "./lib/Step.svelte";
   import Navbar from "./lib/Navbar.svelte";
   import InfoForm from "./lib/InfoForm.svelte";
-  import type { NavButtonType } from "./ts-support";
+  import type {
+    BillingFrequencyType,
+    NavButtonType,
+    PlanType,
+  } from "./ts-support";
   import { UserValidator } from "./helper";
+  import PlanForm from "./lib/PlanForm.svelte";
 
   // reactive state
-  $: currentStepIndex = 0;
+  $: currentStepIndex = 1;
   $: showBtns = true;
   $: formData = {
     user: {
@@ -17,7 +21,8 @@
       email: "",
       phone: "",
     },
-    plan: "arcade",
+    plan: "arcade" as PlanType,
+    billingFrequency: "monthly" as BillingFrequencyType,
     addOns: [],
   };
 
@@ -73,7 +78,12 @@
       // step forward to the next slot
       stepForward();
     }
-    console.log(type, formData.user);
+    console.log(type, formData);
+  }
+
+  function toggleBillingFrequency() {
+    formData.billingFrequency =
+      formData.billingFrequency === "monthly" ? "yearly" : "monthly";
   }
 </script>
 
@@ -98,8 +108,11 @@
       {#if currentStepIndex === 0}
         <InfoForm bind:user={formData.user} bind:errors />
       {:else if currentStepIndex === 1}
-      <!-- TODO: Select Plan -->
-        <div>lorem</div>
+        <PlanForm
+          bind:selectedPlan={formData.plan}
+          bind:billingFrequency={formData.billingFrequency}
+          on:toggle-frequency={toggleBillingFrequency}
+        />
       {/if}
     </div>
     <ul
@@ -108,9 +121,7 @@
         ? 'bg-neutral-5'
         : ''}"
     >
-      <div
-        class="w-11/12 py-3  max-w-sm md:max-w-md mx-auto grid grid-cols-2"
-      >
+      <div class="w-11/12 py-3  max-w-sm md:max-w-md mx-auto grid grid-cols-2">
         <Navbar
           on:handle-click={handleClickBtn}
           maxSteps={steps.length - 1}
