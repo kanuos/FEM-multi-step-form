@@ -24,7 +24,7 @@
 />
 <label
   for={plan}
-  class="flex gap-4 items-center w-full p-4 border-2 rounded-lg cursor-pointer md:flex-col md:items-start md:gap-y-8 transition-all
+  class="flex gap-4 items-center w-full p-4 border-2 rounded-lg cursor-pointer md:flex-col md:items-start md:p-6 md:gap-y-8 transition-all
   {isSelected
     ? 'border-primary-2/50 bg-primary-3/5'
     : 'border-neutral-1/20 bg-[transparent] hover:border-primary-2/40'}"
